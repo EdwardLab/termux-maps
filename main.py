@@ -41,7 +41,7 @@ def get_cell_info():
     return None
 
 def get_location_from_opencellid(cell_info):
-    api_key = 'pk.f539d23198812c26386f412cc357b792'
+    api_key = ''
     url = f'https://us1.unwiredlabs.com/v2/process.php'
     payload = {
         'token': api_key,
