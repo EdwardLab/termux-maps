@@ -6,11 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        #map { height: 100vh; width: 100vw; }
+        #map { height: 100vh; width: 100vw; display: none; }
+        #loading { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; }
         body { margin: 0; padding: 0; }
     </style>
 </head>
 <body>
+    <div id="loading">
+        <div>Loading...</div>
+    </div>
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
@@ -29,10 +33,15 @@
                         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     }).addTo(map);
                     L.marker([data.latitude, data.longitude]).addTo(map)
-                        .bindPopup(`Latitude: ${data.latitude}, Longitude: ${data.longitude}`)
+                        .bindPopup(`Latitude: ${data.latitude}, Longitude: ${data.longitude}<br>Provider: ${data.provider}`)
                         .openPopup();
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('map').style.display = 'block';
                 })
-                .catch(error => console.error('Error fetching location:', error));
+                .catch(error => {
+                    console.error('Error fetching location:', error);
+                    document.getElementById('loading').innerHTML = 'Failed to load map data.';
+                });
         });
     </script>
 </body>
