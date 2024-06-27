@@ -14,18 +14,26 @@
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Fetch location data from Flask endpoint
-        fetch('/location')
-            .then(response => response.json())
-            .then(data => {
-                var map = L.map('map').setView([data.latitude, data.longitude], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(map);
-                L.marker([data.latitude, data.longitude]).addTo(map)
-                    .bindPopup(`Latitude: ${data.latitude}, Longitude: ${data.longitude}`)
-                    .openPopup();
-            });
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/location')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Location data:', data); // Debug output
+                    var map = L.map('map').setView([data.latitude, data.longitude], 13);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+                    L.marker([data.latitude, data.longitude]).addTo(map)
+                        .bindPopup(`Latitude: ${data.latitude}, Longitude: ${data.longitude}`)
+                        .openPopup();
+                })
+                .catch(error => console.error('Error fetching location:', error));
+        });
     </script>
 </body>
 </html>
